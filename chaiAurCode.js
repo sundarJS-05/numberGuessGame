@@ -12,11 +12,26 @@ let restartGame = document.querySelector('.resultParas')
 const paragraph = document.createElement('p')
 
 let prevGuesses = []
-let numGuess = 0
+let numGuess = 1
 let playGame = true
 
 
 // logic starts
+
+if(playGame){
+    submit.addEventListener('click', (event)=>{
+
+        // since its a form element - prevent default behaviour
+        event.preventDefault()
+        let guess = parseInt(userInput.value)
+        console.log('guess value is', guess);
+        
+
+        validateGuess(guess)
+
+    })
+
+}
 
 let validateGuess = (guess)=>{
 
@@ -32,7 +47,7 @@ let validateGuess = (guess)=>{
     else{
         prevGuesses.push(guess)
 
-        if (numGuess >10 ){
+        if (numGuess ==10 ){
             cleanUpGuess(guess)
             displayMessage(`Your turns are over!! The no. to be guessed was ${randomNo}`)
             endGame()
@@ -47,22 +62,6 @@ let validateGuess = (guess)=>{
 
     }
     
-}
-
-
-if(playGame){
-    submit.addEventListener('click', (event)=>{
-
-        // since its a form element - prevent default behaviour
-        event.preventDefault()
-        let guess = parseInt(userInput.value)
-        console.log('guess value is', guess);
-        
-
-        validateGuess(guess)
-
-    })
-
 }
 
 
@@ -82,9 +81,9 @@ let checkGuess = (guess)=>{
         displayMessage(`Higher than the no.`)
 
     }
-
     
 }
+
 
 let cleanUpGuess = (guess)=>{
     // This cleans up the previous guess value
@@ -99,19 +98,55 @@ let cleanUpGuess = (guess)=>{
     
 }
 
+
 let displayMessage = (message)=>{
-    lowOrHigh.innerHTML = `${message}`
+    lowOrHigh.innerHTML = `<h3>${message}</h3>`
     
 }
 
-let newGame = ()=>{
-
-}
 
 let endGame = ()=>{
+    
     userInput.value = ''
-    userInput.setAttribute( 'disabled', )
+
+    // so that futrher valus addn to INPUt NOt allowed
+    userInput.setAttribute( 'disabled', '')
+
+    // another mehtod of adding button elemnet to existying 'p' element
+    paragraph.classList.add('button')
+
+    paragraph.innerHTML=`<h3 id='newGame'> Start new game</h3>`
+
+    // adding paragraph element to existing 'resultparas' calss
+    restartGame.appendChild(paragraph)
+
+    playGame = false
+
+    newGame()
 
 }
+
+
+let newGame = ()=>{
+
+    let newGameButton = document.querySelector('#newGame')
+
+    newGameButton.addEventListener( 'click', (event)=>{
+
+        randomNo = Math.floor(Math.random()*100 + 1)
+        prevGuesses=[]
+        numGuess=0
+        guessSlot.innerHTML=``
+        remainingGuess.innerHTML= 10-numGuess
+        userInput.removeAttribute('disabled')
+        restartGame.removeChild(paragraph)
+
+        playGame=true
+
+    })
+
+}
+
+
 
 
